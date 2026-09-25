@@ -1,0 +1,5 @@
+{
+  "files": ["exceptions.py", "book.py", "loan.py", "library_card.py", "member.py", "library.py"],
+  "ignore": [],
+  "max": 10
+}

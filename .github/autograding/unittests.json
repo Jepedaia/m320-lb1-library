@@ -1,0 +1,170 @@
+[
+  {
+    "name": "test_grade_init_valid",
+    "function": "test_grade_init_valid",
+    "timeout": 10,
+    "points": 1
+  },
+  {
+    "name": "test_grade_init_invalid",
+    "function": "test_grade_init_invalid",
+    "timeout": 10,
+    "points": 1
+  },
+  {
+    "name": "test_grade_init_too_small",
+    "function": "test_grade_init_too_small",
+    "timeout": 10,
+    "points": 1
+  },
+  {
+    "name": "test_grade_init_too_high",
+    "function": "test_grade_init_too_high",
+    "timeout": 10,
+    "points": 1
+  },
+  {
+    "name": "test_school_class_init",
+    "function": "test_school_class_init",
+    "timeout": 10,
+    "points": 1
+  },
+  {
+    "name": "test_single_student_added",
+    "function": "test_single_student_added",
+    "timeout": 10,
+    "points": 1
+  },
+  {
+    "name": "test_take_invalid_student",
+    "function": "test_take_invalid_student",
+    "timeout": 10,
+    "points": 1
+  },
+  {
+    "name": "test_multi_student_added",
+    "function": "test_multi_student_added",
+    "timeout": 10,
+    "points": 1
+  },
+  {
+    "name": "test_too_many_student_added",
+    "function": "test_too_many_student_added",
+    "timeout": 10,
+    "points": 1
+  },
+  {
+    "name": "test_student_list",
+    "function": "test_student_list",
+    "timeout": 10,
+    "points": 1
+  },
+  {
+    "name": "test_initialisation",
+    "function": "test_initialisation",
+    "timeout": 10,
+    "points": 1
+  },
+  {
+    "name": "test_relationship_to_classreport",
+    "function": "test_relationship_to_classreport",
+    "timeout": 10,
+    "points": 1
+  },
+  {
+    "name": "test_empty_report",
+    "function": "test_empty_report",
+    "timeout": 10,
+    "points": 1
+  },
+  {
+    "name": "test_add_subject",
+    "function": "test_add_subject",
+    "timeout": 10,
+    "points": 1
+  },
+  {
+    "name": "test_add_multiple_subjects",
+    "function": "test_add_multiple_subjects",
+    "timeout": 10,
+    "points": 1
+  },
+  {
+    "name": "test_max_subjects",
+    "function": "test_max_subjects",
+    "timeout": 10,
+    "points": 1
+  },
+  {
+    "name": "test_take_valid",
+    "function": "test_take_valid",
+    "timeout": 10,
+    "points": 1
+  },
+  {
+    "name": "test_take_invalid",
+    "function": "test_take_invalid",
+    "timeout": 10,
+    "points": 1
+  },
+  {
+    "name": "test_empty_subject",
+    "function": "test_empty_subject",
+    "timeout": 10,
+    "points": 1
+  },
+  {
+    "name": "test_single_grade_added",
+    "function": "test_single_grade_added",
+    "timeout": 10,
+    "points": 1
+  },
+  {
+    "name": "test_multi_grade_added",
+    "function": "test_multi_grade_added",
+    "timeout": 10,
+    "points": 1
+  },
+  {
+    "name": "test_too_many_grades_added",
+    "function": "test_too_many_grades_added",
+    "timeout": 10,
+    "points": 1
+  },
+  {
+    "name": "test_get_grade_valid",
+    "function": "test_get_grade_valid",
+    "timeout": 10,
+    "points": 1
+  },
+  {
+    "name": "test_get_grade_invalid",
+    "function": "test_get_grade_invalid",
+    "timeout": 10,
+    "points": 1
+  },
+  {
+    "name": "test_multi_grade",
+    "function": "test_multi_grade",
+    "timeout": 10,
+    "points": 1
+  },
+  {
+    "name": "test_average_without_grade",
+    "function": "test_average_without_grade",
+    "timeout": 10,
+    "points": 1
+  },
+  {
+    "name": "test_single_grade_average",
+    "function": "test_single_grade_average",
+    "timeout": 10,
+    "points": 1
+  },
+  {
+    "name": "test_average",
+    "function": "test_average",
+    "timeout": 10,
+    "points": 1
+  }
+]
