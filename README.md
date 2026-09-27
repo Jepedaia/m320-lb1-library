@@ -107,33 +107,32 @@ Repräsentiert ein Buch.
 ### 3.3 Modul `loan.py`
 Repräsentiert eine Ausleihe. Als Dataclass mit Kapselung (Properties/Setter) umsetzen.
 - **Initialisierung:**
-  - Nimmt Buch, Ausleihdatum und Dauer entgegen.
   - Standardmässig wird als Ausleihdatum das aktuelle Datum (`now`) verwendet. Falls ein Datums-String im Format `"%d.%m.%Y"` (z. B. `"15.10.2026"`) übergeben wird, muss dieser umgewandelt werden.
-  - Die Standard-Leihdauer beträgt 14 Tage. Kann als Ganzzahl (Tage) oder Zeitspanne übergeben werden.
+  - Die Standard-Leihdauer beträgt 14 Tage. Kann als Ganzzahl (Tage) oder Zeitspanne angegeben werden.
   - **Validierung:** Ist die Ausleihdauer $\le 0$ oder $> 60$ Tage, wird ein `InvalidDurationError` ausgelöst.
 - **Methoden & Properties:**
   - `due_date`: Berechnet und liefert das Fälligkeitsdatum (Ausleihdatum + Dauer).
-  - `is_overdue(check_date)`: Prüft, ob die Ausleihe zum angegebenen Zeitpunkt (Standard: `now`) überfällig ist (`True`/`False`).
+  - `is_overdue`: Prüft, ob die Ausleihe zum Prüfzeitpunkt (Standard: `now`) überfällig ist (`True`/`False`).
 
 ---
 
 ### 3.4 Modul `library_card.py`
 Verwaltet die Ausleihen eines Mitglieds.
 - **Konstruktor:**
-  - Initialisiert eine leere Sammlung für Ausleihen und speichert die optionale Referenz zum Mitglied.
+  - Initialisiert eine leere Sammlung für Ausleihen.
 - **Methoden:**
-  - `add_loan(loan)`:
+  - `add_loan`:
     - Fügt eine neue Ausleihe hinzu.
     - Maximal 5 aktive Ausleihen sind erlaubt. Wird versucht, eine weitere Ausleihe hinzuzufügen, wird ein `LoanLimitExceededError` ausgelöst.
     - Bereits vorhandene Ausleihen werden nicht doppelt aufgenommen.
-  - `take_loan(index)`:
+  - `take_loan`:
     - Liefert die Ausleihe an der gewünschten Position zurück.
     - Löst bei ungültiger Position einen `IndexError` aus.
-  - `count_loans()`:
+  - `count_loans`:
     - Gibt die Anzahl der aktiven Ausleihen zurück.
-  - `count_overdue_loans(current_date)`:
+  - `count_overdue_loans`:
     - Zählt alle Ausleihen, die zum Prüfdatum bereits überfällig sind.
-  - `show_overview()`:
+  - `show_overview`:
     - Liefert eine Übersicht als Text (z. B. `"Card for Anna Meier: 3 loans"`).
 
 ---
@@ -143,7 +142,7 @@ Repräsentiert ein Bibliotheksmitglied.
 - **Konstruktor:**
   - Initialisiert das Mitglied und stellt die gemäss Klassendiagramm definierte Beziehung zur Karte her.
 - **Methoden:**
-  - `show_card()`:
+  - `show_card`:
     - Gibt die zugehörige Karte zurück.
 
 ---
@@ -153,20 +152,20 @@ Repräsentiert die Bibliothek und verwaltet Mitglieder.
 - **Konstruktor:**
   - Initialisiert eine leere Bibliothek.
 - **Methoden:**
-  - `add_member(member)`:
+  - `add_member`:
     - Registriert ein neues Mitglied und stellt die Beziehung gemäss Klassendiagramm her.
     - Maximal 50 Mitglieder sind zulässig; darüber hinaus wird ein `OverflowError` ausgelöst.
     - Duplikate werden ignoriert.
-  - `take_member(index)`:
+  - `take_member`:
     - Liefert das Mitglied an der Position zurück; bei ungültiger Position wird ein `IndexError` ausgelöst.
-  - `count_members()`:
+  - `count_members`:
     - Gibt die Anzahl registrierter Mitglieder zurück.
-  - `show_member_list()`:
+  - `show_member_list`:
     - Liefert einen Text mit den Namen aller Mitglieder, jeweils durch einen Zeilenumbruch getrennt.
-  - `find_member(name)`:
+  - `find_member`:
     - Sucht nach einem Mitglied anhand des Namens und gibt es zurück (oder `None`, wenn nicht gefunden).
-  - `borrow_book(member, book, days)`:
-    - Erstellt eine Ausleihe für das Buch mit der angegebenen Tagesanzahl (Standard: 14) und fügt sie der Karte des Mitglieds hinzu.
+  - `borrow_book`:
+    - Erstellt und verbucht eine Ausleihe (Standarddauer: 14 Tage).
     - Tritt dabei ein `LoanLimitExceededError` auf, wird dieser abgefangen, eine Fehlermeldung auf der Konsole ausgegeben und `False` zurückgegeben.
     - War die Ausleihe erfolgreich, wird `True` zurückgegeben.
 
