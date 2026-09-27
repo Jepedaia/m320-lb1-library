@@ -255,13 +255,3 @@ Oder direkt:
 python3 main.py
 ```
 
----
-
-## 7. Empfohlene Reihenfolge zur Bearbeitung
-1. `exceptions.py` (bereits vorbereitet, inspizieren)
-2. `book.py` (`@dataclass` Attribute prüfen)
-3. `loan.py` (Properties, Datums- und Timedelta-Konvertierung, Fälligkeitsberechnung)
-4. `library_card.py` (Listenverwaltung, Limits, Exceptions)
-5. `member.py` (1:1-Beziehung im Konstruktor)
-6. `library.py` (1:n-Beziehung ausserhalb Konstruktor, `try/except` in `borrow_book`)
-7. `main.py` ausführen und `pytest -v` überprüfen!
