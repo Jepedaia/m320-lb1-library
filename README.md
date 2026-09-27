@@ -88,20 +88,9 @@ classDiagram
 
 ---
 
-## 3. Übersicht der Beziehungen (Prüfungsschwerpunkt!)
+## 3. Spezifikation der Module und Klassen
 
-| Beziehung | Beteiligte Klassen | Art | Multiplizität | Wo/Wie hergestellt |
-|---|---|---|---|---|
-| **Ausleihe -> Buch** | `Loan` $\rightarrow$ `Book` | Einseitig | 1:1 | Im `Loan`-Objekt (`book`-Attribut) |
-| **Karte -> Ausleihen** | `LibraryCard` $\rightarrow$ `Loan` | Einseitig | 1:n | Verwaltet in `loans`-Liste über `add_loan` |
-| **Mitglied <-> Karte** | `Member` $\leftrightarrow$ `LibraryCard` | **Zweiseitig** | 1:1 | **Im Konstruktor** von `Member`: `card.member = self` |
-| **Bibliothek <-> Mitglied** | `Library` $\leftrightarrow$ `Member` | **Zweiseitig** | 1:n | **Ausserhalb des Konstruktors**: in `Library.add_member()` via `member.library = self` |
-
----
-
-## 4. Spezifikation der Module und Klassen
-
-### 4.1 Modul `exceptions.py`
+### 3.1 Modul `exceptions.py`
 Hier werden domain-spezifische Exceptions definiert:
 - `LibraryError(Exception)`: Basisklasse aller Bibliotheksfehler.
 - `LoanLimitExceededError(LibraryError)`: Wird ausgelöst, wenn ein Mitglied mehr als 5 Bücher gleichzeitig ausleihen möchte.
@@ -109,7 +98,7 @@ Hier werden domain-spezifische Exceptions definiert:
 
 ---
 
-### 4.2 Modul `book.py`
+### 3.2 Modul `book.py`
 Implementiert als reine `@dataclass`:
 - **Attribute:**
   - `title: str`
@@ -119,7 +108,7 @@ Implementiert als reine `@dataclass`:
 
 ---
 
-### 4.3 Modul `loan.py`
+### 3.3 Modul `loan.py`
 Implementiert als `@dataclass` mit Kapselung (`property` / `setter`), `datetime` und `timedelta`:
 - **Felder & Attribute:**
   - `book: Book`: Das ausgeliehene Buch.
@@ -139,7 +128,7 @@ Implementiert als `@dataclass` mit Kapselung (`property` / `setter`), `datetime`
 
 ---
 
-### 4.4 Modul `library_card.py`
+### 3.4 Modul `library_card.py`
 Verwaltet die aktiven Ausleihen eines Mitglieds:
 - **Konstruktor:** `__init__(self, member=None)`:
   - Initialisiert eine leere Liste für Ausleihen (`loans`).
@@ -162,7 +151,7 @@ Verwaltet die aktiven Ausleihen eines Mitglieds:
 
 ---
 
-### 4.5 Modul `member.py`
+### 3.5 Modul `member.py`
 Repräsentiert ein Bibliotheksmitglied:
 - **Konstruktor:** `__init__(self, name: str, card: LibraryCard)`:
   - Speichert `name`, `card` und initialisiert `library` mit `None`.
@@ -182,7 +171,7 @@ Repräsentiert ein Bibliotheksmitglied:
 
 ---
 
-### 4.6 Modul `library.py`
+### 3.6 Modul `library.py`
 Repräsentiert die Bibliothek:
 - **Konstruktor:** `__init__(self, name: str)`:
   - Speichert `name` und initialisiert eine leere Mitgliederliste `members`.
@@ -219,7 +208,7 @@ Repräsentiert die Bibliothek:
 
 ---
 
-## 5. Codingstandards (BZZ-Richtlinien & PEP 8)
+## 4. Codingstandards (BZZ-Richtlinien & PEP 8)
 1. **Englische Bezeichner:**
    Alle Klassen-, Funktions-, Variablen- und Attributnamen müssen in englischer Sprache verfasst sein.
 2. **Datenkapselung:**
@@ -232,7 +221,7 @@ Repräsentiert die Bibliothek:
 
 ---
 
-## 6. Überprüfung & Ausführung
+## 5. Überprüfung & Ausführung
 
 ### Unittests ausführen:
 Im Projektverzeichnis `m320-lb1-library` ausführen:
