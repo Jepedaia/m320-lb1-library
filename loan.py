@@ -27,19 +27,19 @@ class Loan:
     @property
     def book(self) -> Book:
         """Returns the borrowed book."""
-        # TODO: Return internal book attribute
+        # TODO: Return book
         raise NotImplementedError("Loan.book getter not implemented yet.")
 
     @book.setter
     def book(self, value: Book):
         """Sets the borrowed book."""
-        # TODO: Set internal book attribute
+        # TODO: Set book
         raise NotImplementedError("Loan.book setter not implemented yet.")
 
     @property
     def borrow_date(self) -> datetime:
         """Returns the borrow date as datetime."""
-        # TODO: Return internal borrow_date attribute
+        # TODO: Return borrow_date
         raise NotImplementedError("Loan.borrow_date getter not implemented yet.")
 
     @borrow_date.setter
@@ -51,7 +51,7 @@ class Loan:
     @property
     def duration(self) -> timedelta:
         """Returns the duration as timedelta."""
-        # TODO: Return internal duration attribute
+        # TODO: Return duration
         raise NotImplementedError("Loan.duration getter not implemented yet.")
 
     @duration.setter

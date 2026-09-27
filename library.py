@@ -13,7 +13,7 @@ class Library:
 
     def __init__(self, name: str):
         """Initializes library with name and empty members list."""
-        # TODO: Initialize self._name and self._members list
+        # TODO: Initialize name and members list
         raise NotImplementedError("Library.__init__ not implemented yet.")
 
     def add_member(self, member: Member):
@@ -36,7 +36,7 @@ class Library:
 
     def count_members(self) -> int:
         """Returns number of registered members."""
-        # TODO: Return length of self._members
+        # TODO: Return count of members
         raise NotImplementedError("Library.count_members not implemented yet.")
 
     def show_member_list(self) -> str:
@@ -60,11 +60,11 @@ class Library:
 
     def find_member(self, name: str) -> Member | None:
         """Finds and returns member by name, or None if not found."""
-        # TODO: Search member by name in self._members
+        # TODO: Search member by name in members
         raise NotImplementedError("Library.find_member not implemented yet.")
 
     @property
     def name(self) -> str:
         """Returns library name."""
-        # TODO: Return internal name
+        # TODO: Return name
         raise NotImplementedError("Library.name getter not implemented yet.")

@@ -39,16 +39,16 @@ classDiagram
 
     class Loan {
         <<dataclass>>
-        +Book book
-        +datetime borrow_date
-        +timedelta duration
+        -Book book
+        -datetime borrow_date
+        -timedelta duration
         +datetime due_date
         +is_overdue(check_date) bool
     }
 
     class LibraryCard {
-        -list _loans
-        -Member _member
+        -list loans
+        -Member member
         +add_loan(loan) None
         +take_loan(index) Loan
         +count_loans() int
@@ -58,9 +58,9 @@ classDiagram
     }
 
     class Member {
-        -str _name
-        -LibraryCard _card
-        -Library _library
+        -str name
+        -LibraryCard card
+        -Library library
         +name str
         +card LibraryCard
         +library Library
@@ -68,8 +68,8 @@ classDiagram
     }
 
     class Library {
-        -str _name
-        -list _members
+        -str name
+        -list members
         +name str
         +add_member(member) None
         +take_member(index) Member
@@ -93,7 +93,7 @@ classDiagram
 | Beziehung | Beteiligte Klassen | Art | Multiplizität | Wo/Wie hergestellt |
 |---|---|---|---|---|
 | **Ausleihe -> Buch** | `Loan` $\rightarrow$ `Book` | Einseitig | 1:1 | Im `Loan`-Objekt (`book`-Attribut) |
-| **Karte -> Ausleihen** | `LibraryCard` $\rightarrow$ `Loan` | Einseitig | 1:n | Verwaltet in `self._loans: list` über `add_loan` |
+| **Karte -> Ausleihen** | `LibraryCard` $\rightarrow$ `Loan` | Einseitig | 1:n | Verwaltet in `loans`-Liste über `add_loan` |
 | **Mitglied <-> Karte** | `Member` $\leftrightarrow$ `LibraryCard` | **Zweiseitig** | 1:1 | **Im Konstruktor** von `Member`: `card.member = self` |
 | **Bibliothek <-> Mitglied** | `Library` $\leftrightarrow$ `Member` | **Zweiseitig** | 1:n | **Ausserhalb des Konstruktors**: in `Library.add_member()` via `member.library = self` |
 
@@ -142,21 +142,21 @@ Implementiert als `@dataclass` mit Kapselung (`property` / `setter`), `datetime`
 ### 4.4 Modul `library_card.py`
 Verwaltet die aktiven Ausleihen eines Mitglieds:
 - **Konstruktor:** `__init__(self, member=None)`:
-  - Initialisiert eine leere Liste `self._loans = []`.
-  - Speichert `self._member = member`.
+  - Initialisiert eine leere Liste für Ausleihen (`loans`).
+  - Speichert das optionale `member`-Objekt.
 - **Properties:**
   - `member`: Getter und Setter für das zugehörige `Member`-Objekt.
 - **Methoden:**
   - `add_loan(self, loan: Loan) -> None`:
     - Prüft, ob bereits 5 Ausleihen vorhanden sind (`count_loans() >= 5`). Falls ja: `raise LoanLimitExceededError("Maximum number of loans reached (5)")`.
-    - Falls `loan` noch nicht in `self._loans` enthalten ist, wird es hinzugefügt.
+    - Falls `loan` noch nicht in `loans` enthalten ist, wird es hinzugefügt.
   - `take_loan(self, index: int) -> Loan`:
     - Gibt die Ausleihe am übergebenen `index` zurück.
-    - Wirft `IndexError`, falls der Index ungültig ist (`index < 0` oder `index >= len(self._loans)`).
+    - Wirft `IndexError`, falls der Index ungültig ist.
   - `count_loans(self) -> int`:
     - Gibt die Anzahl der aktuell aktiven Ausleihen zurück.
   - `count_overdue_loans(self, current_date: datetime | None = None) -> int`:
-    - Zählt alle Ausleihen in `self._loans`, bei denen `loan.is_overdue(current_date)` `True` ergibt.
+    - Zählt alle Ausleihen, bei denen `loan.is_overdue(current_date)` `True` ergibt.
   - `show_overview(self) -> str`:
     - Gibt eine formatierte Zusammenfassung als String zurück (z. B. `"Card for Anna Meier: 3 loans"`).
 
@@ -165,7 +165,7 @@ Verwaltet die aktiven Ausleihen eines Mitglieds:
 ### 4.5 Modul `member.py`
 Repräsentiert ein Bibliotheksmitglied:
 - **Konstruktor:** `__init__(self, name: str, card: LibraryCard)`:
-  - Speichert `_name = name`, `_card = card` und setzt `_library = None`.
+  - Speichert `name`, `card` und initialisiert `library` mit `None`.
   - **Zweiseitige 1:1-Beziehung im Konstruktor:**
     Verknüpft die übergebene Karte sofort mit diesem Mitglied:
     ```python
@@ -178,21 +178,21 @@ Repräsentiert ein Bibliotheksmitglied:
   - `library`: Getter und Setter (`@library.setter`).
 - **Methoden:**
   - `show_card(self) -> LibraryCard`:
-    - Gibt `self._card` zurück.
+    - Gibt die Karte des Mitglieds zurück.
 
 ---
 
 ### 4.6 Modul `library.py`
 Repräsentiert die Bibliothek:
 - **Konstruktor:** `__init__(self, name: str)`:
-  - Speichert `_name = name` und initialisiert eine leere Mitgliederliste `_members = []`.
+  - Speichert `name` und initialisiert eine leere Mitgliederliste `members`.
 - **Properties:**
   - `name`: Read-only Property.
 - **Methoden:**
   - `add_member(self, member: Member) -> None`:
     - Wirft `OverflowError`, wenn die Maximalkapazität von 50 Mitgliedern erreicht ist.
-    - Falls `member` noch nicht in `self._members` existiert:
-      - Zur Liste hinzufügen: `self._members.append(member)`
+    - Falls `member` noch nicht in `members` existiert:
+      - Zur Liste hinzufügen
       - **Zweiseitige 1:n-Beziehung ausserhalb des Konstruktors setzen:** `member.library = self`
   - `take_member(self, index: int) -> Member`:
     - Gibt das Mitglied am angegebenen Index zurück.
@@ -202,7 +202,7 @@ Repräsentiert die Bibliothek:
   - `show_member_list(self) -> str`:
     - Gibt einen String zurück, der alle Mitgliedernamen zeilenweise enthält.
   - `find_member(self, name: str) -> Member | None`:
-    - Sucht in `self._members` nach dem Namen und gibt das Mitglied zurück, oder `None`.
+    - Sucht nach dem Namen und gibt das Mitglied zurück, oder `None`.
   - `borrow_book(self, member: Member, book: Book, days: int = 14) -> bool`:
     - **WICHTIG (Exception Handling / Fangen):**
       Erstellt ein `Loan`-Objekt und versucht, es mittels `member.card.add_loan(loan)` hinzuzufügen.

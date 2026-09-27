@@ -13,7 +13,7 @@ class LibraryCard:
 
     def __init__(self, member=None):
         """Initializes empty loans list and sets optional member reference."""
-        # TODO: Initialize self._loans as list and self._member
+        # TODO: Initialize loans list and member (encapsulated according to coding standards)
         raise NotImplementedError("LibraryCard.__init__ not implemented yet.")
 
     def add_loan(self, loan: Loan):
@@ -22,7 +22,7 @@ class LibraryCard:
         Raises:
             LoanLimitExceededError: If the card already has 5 active loans.
         """
-        # TODO: Check limit (max 5) and add loan to self._loans if not already present
+        # TODO: Check limit (max 5) and add loan if not already present
         raise NotImplementedError("LibraryCard.add_loan not implemented yet.")
 
     def take_loan(self, index: int) -> Loan:
@@ -36,7 +36,7 @@ class LibraryCard:
 
     def count_loans(self) -> int:
         """Returns the number of active loans."""
-        # TODO: Return length of self._loans
+        # TODO: Return number of loans
         raise NotImplementedError("LibraryCard.count_loans not implemented yet.")
 
     def count_overdue_loans(self, current_date: datetime | None = None) -> int:
@@ -52,11 +52,11 @@ class LibraryCard:
     @property
     def member(self):
         """Returns the member associated with this card."""
-        # TODO: Return internal member attribute
+        # TODO: Return member
         raise NotImplementedError("LibraryCard.member getter not implemented yet.")
 
     @member.setter
     def member(self, value):
         """Sets the member associated with this card."""
-        # TODO: Set internal member attribute
+        # TODO: Set member
         raise NotImplementedError("LibraryCard.member setter not implemented yet.")

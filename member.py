@@ -21,29 +21,29 @@ class Member:
 
     def show_card(self) -> LibraryCard:
         """Returns the member's library card."""
-        # TODO: Return self._card
+        # TODO: Return card
         raise NotImplementedError("Member.show_card not implemented yet.")
 
     @property
     def name(self) -> str:
         """Returns the member's name."""
-        # TODO: Return internal name
+        # TODO: Return name
         raise NotImplementedError("Member.name getter not implemented yet.")
 
     @property
     def card(self) -> LibraryCard:
         """Returns the member's library card."""
-        # TODO: Return internal card
+        # TODO: Return card
         raise NotImplementedError("Member.card getter not implemented yet.")
 
     @property
     def library(self):
         """Returns the library this member belongs to, or None."""
-        # TODO: Return internal library
+        # TODO: Return library
         raise NotImplementedError("Member.library getter not implemented yet.")
 
     @library.setter
     def library(self, value):
         """Sets the library for this member (called by Library.add_member)."""
-        # TODO: Set internal library
+        # TODO: Set library
         raise NotImplementedError("Member.library setter not implemented yet.")
