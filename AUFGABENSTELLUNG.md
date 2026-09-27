@@ -172,16 +172,9 @@ Repräsentiert die Bibliothek und verwaltet Mitglieder.
 
 ---
 
-## 4. Codingstandards (BZZ-Richtlinien & PEP 8)
-1. **Englische Bezeichner:**
-   Alle Klassen-, Funktions-, Variablen- und Attributnamen müssen in englischer Sprache verfasst sein.
-2. **Datenkapselung:**
-   Private Attribute beginnen mit einem Unterstrich (z. B. `_loans`, `_members`, `_borrow_date`).
-   Zugriffe erfolgen über `@property` und `@<attribut>.setter`.
-3. **Docstrings:**
-   Jedes Modul, jede Klasse und jede Methode besitzt einen aussagekräftigen Docstring.
-4. **Formatierung:**
-   4 Leerzeichen Einrückung, keine überflüssigen Imports, Leerzeilen gemäss PEP 8.
+## 4. Codingstandards
+Die Einhaltung der BZZ-Codingstandards und PEP 8 wird automatisiert über die Test-Suite (`test_coding_standards.py`) sowie den Pylint-Check geprüft.
+- Referenz: [BZZ Codingstandards für Python](https://wiki.bzz.ch/howto/codingstandards/start)
 
 ---
 
