@@ -1,20 +1,22 @@
-# Leistungsbeurteilung 1 (LB1) – Vorbereitungsprojekt: Bibliotheksverwaltung (Library Management)
+# LB1 - Bibliotheksverwaltung
 
-## 1. Ausgangslage & Kontext
-Im Rahmen der Leistungsbeurteilung 1 im Modul M320 (Objektorientiertes Programmieren mit Python) vertiefen Sie den Umgang mit:
-- **Objektbeziehungen** (einseitig/zweiseitig, 1:1, 1:n, im vs. ausserhalb des Konstruktors)
-- **Listenverwaltung** (Elemente hinzufügen, auslesen, zählen, Limits überwachen)
-- **Dataclasses** (Reine Dataclass & Dataclass mit Properties/Validierung)
-- **Datum & Zeit** (`datetime` und `timedelta`)
-- **Datenkapselung** (`@property` und `@setter`)
-- **Exceptions** (eigene Exceptions definieren, auslösen mit `raise` und fangen mit `try/except`)
-- **Codingstandards** (PEP 8 & BZZ-Codingstandards, englische Bezeichner)
-
-In diesem Übungsprojekt implementieren Sie ein **Bibliotheksverwaltungssystem**. Das Projekt ist mit vollständigen Unittests (`pytest`) und Pylint-Checks ausgestattet. Ihre Aufgabe ist es, die vorbereiteten Methoden-Stubs schrittweise zu implementieren, bis alle Tests **grün** sind und die Codingstandards eingehalten werden.
+Sie können in einer komplexen Anwendung selbständig:
+- die Klassen erstellen
+- die Beziehungen einpflegen (einseitig, zweiseitig, mehrfache)
+- den nötigen Ablauf selbst festlegen
+- die geforderten Ausgaben erzeugen
+- eigene Exceptions definieren, auslösen und fangen
+- Dataclasses, DateTime und TimeDelta anwenden
 
 ---
 
-## 2. UML-Klassendiagramm
+## Auftrag
+Es ist eine einfache Bibliotheksverwaltung gemäss folgendem Klassendiagramm zu implementieren.
+Dabei nutzen Sie Ihr Wissen zu ein- und zweiseitigen Beziehungen sowie der Referenzzuweisung (im vs. ausserhalb des Konstruktors). Ebenso verwenden Sie Mehrfachbeziehungen, Dataclasses, DateTime/TimeDelta und eigene Exceptions.
+
+---
+
+## Klassendiagramm
 
 ```mermaid
 classDiagram
@@ -32,51 +34,51 @@ classDiagram
 
     class Book {
         <<dataclass>>
-        +str title
-        +str author
-        +str isbn
+        -String title
+        -String author
+        -String isbn
     }
 
     class Loan {
         <<dataclass>>
         -Book book
-        -datetime borrow_date
-        -timedelta duration
-        +datetime due_date
+        -DateTime borrow_date
+        -TimeDelta duration
+        +due_date DateTime
         +is_overdue(check_date) bool
     }
 
     class LibraryCard {
-        -list loans
+        -Loan[] loans
         -Member member
-        +add_loan(loan) None
+        +add_loan(loan) void
         +take_loan(index) Loan
         +count_loans() int
         +count_overdue_loans(current_date) int
-        +show_overview() str
+        +show_overview() String
         +member Member
     }
 
     class Member {
-        -str name
+        -String name
         -LibraryCard card
         -Library library
-        +name str
+        +show_card() LibraryCard
+        +name String
         +card LibraryCard
         +library Library
-        +show_card() LibraryCard
     }
 
     class Library {
-        -str name
-        -list members
-        +name str
-        +add_member(member) None
+        -String name
+        -Member[] members
+        +add_member(member) void
         +take_member(index) Member
         +count_members() int
-        +show_member_list() str
+        +show_member_list() String
         +borrow_book(member, book, days) bool
         +find_member(name) Member
+        +name String
     }
 
     %% Relationships
@@ -88,115 +90,158 @@ classDiagram
 
 ---
 
-## 3. Spezifikation der Module und Klassen
-
-### 3.1 Modul `exceptions.py`
-Hier werden domain-spezifische Exceptions definiert:
-- `LibraryError`: Basisklasse aller Bibliotheksfehler (erbt von `Exception`).
-- `LoanLimitExceededError`: Fehler bei Überschreitung des Ausleihlimits (erbt von `LibraryError`).
-- `InvalidDurationError`: Fehler bei unzulässiger Ausleihdauer (erbt von `LibraryError`).
+## Allgemeine Hinweise
+- Die Methoden `show_…` liefern immer einen String als Returnwert. Der `print`-Befehl wird nur im `main()` genutzt.
+- Die Einhaltung der BZZ-Codingstandards (PEP 8, englische Bezeichner, Datenkapselung, Docstrings) wird automatisiert über die Test-Suite (`test_coding_standards.py`) sowie den Pylint-Check geprüft.
 
 ---
 
-### 3.2 Modul `book.py`
-Repräsentiert ein Buch.
-- Als Dataclass gemäss Klassendiagramm umsetzen.
+## Library
 
----
+### Konstruktor
+Die Schreibweise `members[] : Member` im Klassendiagramm zeigt an, dass es sich um eine Liste (Array) handelt.
+Initialisieren Sie das Attribut als leere Liste.
 
-### 3.3 Modul `loan.py`
-Repräsentiert eine Ausleihe. Als Dataclass mit Kapselung (Properties/Setter) umsetzen.
-- **Initialisierung:**
-  - Standardmässig wird als Ausleihdatum das aktuelle Datum (`now`) verwendet. Falls ein Datums-String im Format `"%d.%m.%Y"` (z. B. `"15.10.2026"`) übergeben wird, muss dieser umgewandelt werden.
-  - Die Standard-Leihdauer beträgt 14 Tage. Kann als Ganzzahl (Tage) oder Zeitspanne angegeben werden.
-  - **Validierung:** Ist die Ausleihdauer $\le 0$ oder $> 60$ Tage, wird ein `InvalidDurationError` ausgelöst.
-- **Methoden & Properties:**
-  - `due_date`: Berechnet und liefert das Fälligkeitsdatum (Ausleihdatum + Dauer).
-  - `is_overdue`: Prüft, ob die Ausleihe zum Prüfzeitpunkt (Standard: `now`) überfällig ist (`True`/`False`).
+### add_member
+Fügt ein Mitglied in die Liste ein und pflegt die zweiseitige Beziehung ein.
+Beachten Sie, dass gemäss Klassendiagramm max. 50 Mitglieder möglich sind. Das müssen Sie beim Zufügen von Mitgliedern umsetzen.
+Beim Versuch mehr als 50 Mitglieder einzufügen, soll die Methode einen `OverflowError` werfen. Bereits vorhandene Mitglieder werden nicht doppelt aufgenommen.
 
----
+### count_members
+Gibt die Anzahl Mitglieder zurück.
 
-### 3.4 Modul `library_card.py`
-Verwaltet die Ausleihen eines Mitglieds.
-- **Konstruktor:**
-  - Initialisiert eine leere Sammlung für Ausleihen.
-- **Methoden:**
-  - `add_loan`:
-    - Fügt eine neue Ausleihe hinzu.
-    - Maximal 5 aktive Ausleihen sind erlaubt. Wird versucht, eine weitere Ausleihe hinzuzufügen, wird ein `LoanLimitExceededError` ausgelöst.
-    - Bereits vorhandene Ausleihen werden nicht doppelt aufgenommen.
-  - `take_loan`:
-    - Liefert die Ausleihe an der gewünschten Position zurück.
-    - Löst bei ungültiger Position einen `IndexError` aus.
-  - `count_loans`:
-    - Gibt die Anzahl der aktiven Ausleihen zurück.
-  - `count_overdue_loans`:
-    - Zählt alle Ausleihen, die zum Prüfdatum bereits überfällig sind.
-  - `show_overview`:
-    - Liefert eine Übersicht als Text (z. B. `"Card for Anna Meier: 3 loans"`).
+### take_member(index)
+Liefert das Mitglied beim angegebenen Index.
+Bei einem ungültigen Index soll ein `IndexError` ausgelöst werden.
 
----
-
-### 3.5 Modul `member.py`
-Repräsentiert ein Bibliotheksmitglied.
-- **Konstruktor:**
-  - Initialisiert das Mitglied und stellt die gemäss Klassendiagramm definierte Beziehung zur Karte her.
-- **Methoden:**
-  - `show_card`:
-    - Gibt die zugehörige Karte zurück.
-
----
-
-### 3.6 Modul `library.py`
-Repräsentiert die Bibliothek und verwaltet Mitglieder.
-- **Konstruktor:**
-  - Initialisiert eine leere Bibliothek.
-- **Methoden:**
-  - `add_member`:
-    - Registriert ein neues Mitglied und stellt die Beziehung gemäss Klassendiagramm her.
-    - Maximal 50 Mitglieder sind zulässig; darüber hinaus wird ein `OverflowError` ausgelöst.
-    - Duplikate werden ignoriert.
-  - `take_member`:
-    - Liefert das Mitglied an der Position zurück; bei ungültiger Position wird ein `IndexError` ausgelöst.
-  - `count_members`:
-    - Gibt die Anzahl registrierter Mitglieder zurück.
-  - `show_member_list`:
-    - Liefert einen Text mit den Namen aller Mitglieder, jeweils durch einen Zeilenumbruch getrennt.
-  - `find_member`:
-    - Sucht nach einem Mitglied anhand des Namens und gibt es zurück (oder `None`, wenn nicht gefunden).
-  - `borrow_book`:
-    - Erstellt und verbucht eine Ausleihe (Standarddauer: 14 Tage).
-    - Tritt dabei ein `LoanLimitExceededError` auf, wird dieser abgefangen, eine Fehlermeldung auf der Konsole ausgegeben und `False` zurückgegeben.
-    - War die Ausleihe erfolgreich, wird `True` zurückgegeben.
-
----
-
-## 4. Codingstandards
-Die Einhaltung der BZZ-Codingstandards und PEP 8 wird automatisiert über die Test-Suite (`test_coding_standards.py`) sowie den Pylint-Check geprüft.
-- Referenz: [BZZ Codingstandards für Python](https://wiki.bzz.ch/howto/codingstandards/start)
-
----
-
-## 5. Überprüfung & Ausführung
-
-### Unittests ausführen:
-Im Projektverzeichnis `m320-lb1-library` ausführen:
-```bash
-/home/jepedaia/PycharmProjects/M320/m320-ix25-m320-lu09-a01-school-ia25b-grimaj/.venv/bin/pytest -v
-```
-(Oder bei aktivem venv einfach: `pytest -v`)
-
-### Pylint-Prüfung ausführen:
-```bash
-python3 _run_pylint.py
-```
-Oder direkt:
-```bash
-/home/jepedaia/PycharmProjects/M320/m320-ix25-m320-lu09-a01-school-ia25b-grimaj/.venv/bin/pylint --rcfile .github/autograding/pylintrc exceptions.py book.py loan.py library_card.py member.py library.py
+### show_member_list
+Diese Methode liefert eine Liste aller Mitglieder. Die Ausgabe könnte wie folgt aussehen:
+```text
+Anna Meier
+Ben Keller
 ```
 
-### Hauptprogramm ausführen:
-```bash
-python3 main.py
+### find_member(name)
+Sucht ein Mitglied anhand des Namens und liefert das Member-Objekt zurück.
+Wird kein Mitglied gefunden, liefert die Methode `None`.
+
+### borrow_book
+Erstellt eine Ausleihe für das Buch und verbucht sie auf der Karte des Mitglieds (Standard-Leihdauer: 14 Tage).
+Beim Versuch, mehr als 5 Bücher auszuleihen, wirft die Karte einen `LoanLimitExceededError`. Fangen Sie diesen Fehler mit `try/except` ab, geben Sie eine Fehlermeldung auf der Konsole aus und liefern Sie `False` zurück. War die Ausleihe erfolgreich, liefert die Methode `True` zurück.
+
+---
+
+## Member
+
+### Konstruktor
+Beachten Sie die Parameter und Defaultwerte gemäss Klassendiagramm.
+Verknüpfen Sie das Mitglied und die Bibliothekskarte zweiseitig miteinander.
+
+### show_card
+Liefert die LibraryCard des Mitglieds zurück.
+
+---
+
+## LibraryCard
+
+### Konstruktor
+Die Schreibweise `loans[] : Loan` im Klassendiagramm zeigt an, dass es sich um eine Liste (Array) handelt.
+Initialisieren Sie das Attribut als leere Liste.
+
+### add_loan
+Fügt eine Ausleihe in die Liste ein.
+Beachten Sie, dass gemäss Klassendiagramm max. 5 Ausleihen möglich sind. Das müssen Sie beim Zufügen umsetzen.
+Beim Versuch mehr als 5 Ausleihen einzufügen, soll die Methode einen `LoanLimitExceededError` werfen. Bereits vorhandene Ausleihen werden nicht doppelt aufgenommen.
+
+### take_loan(index)
+Liefert die Ausleihe beim angegebenen Index.
+Bei einem ungültigen Index soll ein `IndexError` ausgelöst werden.
+
+### count_loans
+Gibt die Anzahl Ausleihen zurück.
+
+### count_overdue_loans(current_date)
+Zählt alle Ausleihen, die zum angegebenen Prüfdatum bereits überfällig sind.
+
+### show_overview
+Diese Methode liefert eine Übersicht über die Karte mit der Anzahl aktiver Ausleihen. Eine mögliche Ausgabe kann wie folgt aussehen:
+```text
+Card for Anna Meier: 3 loans
 ```
 
+---
+
+## Loan
+Die Klasse `Loan` wird als `@dataclass` realisiert.
+
+### Konstruktor / Initialisierung
+Initialisieren Sie die Werte gemäss Klassendiagramm.
+Achten Sie auf die Validierung für die Dauer:
+Standardmässig beträgt die Dauer 14 Tage. Kann als Ganzzahl (Tage) oder Zeitspanne (`timedelta`) angegeben werden.
+Falls die Dauer ungültig ist ($\le 0$ oder $> 60$ Tage), lösen Sie einen `InvalidDurationError` aus. Diese Validierung nehmen Sie im `__post_init__` bzw. Setter vor.
+
+### borrow_date Setter
+Je nach Art des Inputs wird das Ausleihdatum unterschiedlich verarbeitet:
+- `DateTime` $\Rightarrow$ direkt speichern
+- `String` $\Rightarrow$ Umwandeln in DateTime (Format `"%d.%m.%Y"`, z. B. `"15.10.2026"`)
+- Alles andere / `None` $\Rightarrow$ Der aktuelle Zeitstempel (`now`) wird gespeichert.
+
+### due_date
+Berechnet und liefert das Fälligkeitsdatum (`borrow_date + duration`).
+
+### is_overdue(check_date)
+Prüft, ob die Ausleihe zum angegebenen Zeitpunkt (Default: `now`) überfällig ist (`True`/`False`).
+
+---
+
+## Book
+Die Klasse `Book` wird als `@dataclass` realisiert.
+
+---
+
+## Exceptions
+In `exceptions.py` sind die domänenspezifischen Exceptions definiert:
+- `LibraryError` (erbt von `Exception`)
+- `LoanLimitExceededError` (erbt von `LibraryError`)
+- `InvalidDurationError` (erbt von `LibraryError`)
+
+---
+
+## main
+In der main-Methode erzeugen Sie die verschiedenen Objekte und zeigen die Ausgaben an.
+
+### Ausgabe
+```text
+=== Registered Members ===
+Anna Meier
+Ben Keller
+
+=== Borrowing Books ===
+Ausleihe fehlgeschlagen: Anna Meier hat das Ausleihlimit erreicht.
+Anna borrow 6th book result: False (expected False due to limit)
+
+=== Card Overview ===
+Card for Anna Meier: 5 loans
+Overdue loans for Anna in 25 days: 3
+```
+
+---
+
+## Unit tests & Autograding
+Testen Sie die Klassen schrittweise mit `pytest`:
+```bash
+pytest -v
+```
+Oder mit dem bereitgestellten Test-Skript:
+```bash
+./test.sh
+```
+
+**Bewertungskomponenten:**
+- **Unittests:** 36 Tests für funktionale Korrektheit (Klassen, Beziehungen, Exceptions, DateTime, Listen).
+- **Codingstandards & Linting:** 4 Tests in `test_coding_standards.py` sowie Pylint-Score 10.0/10 (PEP 8, Datenkapselung, Docstrings).
+
+---
+
+## Abgabe
+Mittels Push ins private GitHub-Repository.
