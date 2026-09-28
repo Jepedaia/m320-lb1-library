@@ -44,7 +44,7 @@ classDiagram
         -Book book
         -DateTime borrow_date
         -TimeDelta duration
-        +due_date DateTime
+        +due_date() DateTime
         +is_overdue(check_date) bool
     }
 
@@ -56,7 +56,6 @@ classDiagram
         +count_loans() int
         +count_overdue_loans(current_date) int
         +show_overview() String
-        +member Member
     }
 
     class Member {
@@ -64,9 +63,6 @@ classDiagram
         -LibraryCard card
         -Library library
         +show_card() LibraryCard
-        +name String
-        +card LibraryCard
-        +library Library
     }
 
     class Library {
@@ -78,7 +74,6 @@ classDiagram
         +show_member_list() String
         +borrow_book(member, book, days) bool
         +find_member(name) Member
-        +name String
     }
 
     %% Relationships

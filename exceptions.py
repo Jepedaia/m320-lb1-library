@@ -1,8 +1,5 @@
-"""Hier sind custom exceptions abgelegt für die Bibliothek"""
-
 class LibraryError(Exception):
-    def __init__(self):
-        super().__init__()
+    pass
 
 
 class LoanLimitExceededError(LibraryError):
